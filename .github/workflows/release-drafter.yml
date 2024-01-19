@@ -12,6 +12,12 @@ jobs:
   update_release_draft:
     name: ✏️ Draft release
     runs-on: ubuntu-latest
+    permissions:
+      # write permission is required to create a github release
+      contents: write
+      # write permission is required for autolabeler
+      # otherwise, read permission is required at least
+      pull-requests: write
     steps:
       - name: 🚀 Run Release Drafter
         uses: release-drafter/release-drafter@v5.25.0
