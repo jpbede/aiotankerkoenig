@@ -1,11 +1,9 @@
 ---
-name: CI
+name: Linting
 
 # yamllint disable-line rule:truthy
 on:
   push:
-    branches:
-      - main
   pull_request:
   workflow_dispatch:
 
@@ -32,7 +30,7 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
       - name: 🏗 Install Python dependencies
-        run: poetry install --no-interaction
+        run: poetry install --extras cli --no-interaction
       - name: 🚀 Check code for common misspellings
         run: poetry run pre-commit run codespell --all-files
 
@@ -55,7 +53,7 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
       - name: 🏗 Install Python dependencies
-        run: poetry install --no-interaction
+        run: poetry install --extras cli --no-interaction
       - name: 🚀 Run ruff linter
         run: poetry run ruff check --output-format=github .
       - name: 🚀 Run ruff formatter
@@ -80,7 +78,7 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
       - name: 🏗 Install Python dependencies
-        run: poetry install --no-interaction
+        run: poetry install --extras cli --no-interaction
       - name: 🚀 Check Python AST
         run: poetry run pre-commit run check-ast --all-files
       - name: 🚀 Check for case conflicts
@@ -127,7 +125,7 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
       - name: 🏗 Install Python dependencies
-        run: poetry install --no-interaction
+        run: poetry install --extras cli --no-interaction
       - name: 🚀 Run pylint
         run: poetry run pre-commit run pylint --all-files
 
@@ -150,11 +148,12 @@ jobs:
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
       - name: 🏗 Install Python dependencies
-        run: poetry install --no-interaction
+        run: poetry install --extras cli --no-interaction
       - name: 🚀 Run yamllint
         run: poetry run yamllint .
-  mypy:
-    name: mypy
+
+  prettier:
+    name: Prettier
     runs-on: ubuntu-latest
     steps:
       - name: ⤵️ Check out code from GitHub
@@ -171,7 +170,14 @@ jobs:
         run: |
           poetry config virtualenvs.create true
           poetry config virtualenvs.in-project true
-      - name: 🏗 Install dependencies
-        run: poetry install --no-interaction
-      - name: 🚀 Run mypy
-        run: poetry run mypy aiotankerkoenig
+      - name: 🏗 Install Python dependencies
+        run: poetry install --extras cli --no-interaction
+      - name: 🏗 Set up Node.js
+        uses: actions/setup-node@v4.0.1
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+      - name: 🏗 Install NPM dependencies
+        run: npm install
+      - name: 🚀 Run prettier
+        run: poetry run pre-commit run prettier --all-files
