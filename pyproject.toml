@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aiotankerkoenig"
-version = "0.1.0"
+version = "0.1.2"
 description = "Async Python 3 client for tankerkoenig.de"
 authors = ["Jan-Philipp Benecke <jan-philipp@bnck.me>"]
 repository = "https://github.com/jpbede/aiotankerkoenig"
