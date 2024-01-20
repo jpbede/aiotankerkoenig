@@ -11,6 +11,7 @@ from mashumaro import DataClassDictMixin, field_options
 class GasType(StrEnum):
     """Gas type."""
 
+    ALL = "all"
     DIESEL = "diesel"
     E5 = "e5"
     E10 = "e10"
@@ -70,6 +71,7 @@ class Station(DataClassDictMixin):
         metadata=field_options(alias="opening_times"),
         default=None,
     )
+    distance: float | None = field(metadata=field_options(alias="dist"), default=None)
 
 
 @dataclass(frozen=True, slots=True)
