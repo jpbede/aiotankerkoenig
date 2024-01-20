@@ -34,7 +34,7 @@ class Tankerkoenig:
         )
 
         headers = {
-            "User-Agent": f"PythonHomeassistantAnalytics/{VERSION}",
+            "User-Agent": f"aiotankerkoenig/{VERSION}",
             "Accept": "application/json",
         }
 
