@@ -8,3 +8,7 @@ class TankerkoenigError(Exception):
 
 class TankerkoenigConnectionError(TankerkoenigError):
     """Raised when a connection error occurs."""
+
+
+class TankerkoenigInvalidKeyError(TankerkoenigError):
+    """Raised when the API key is invalid."""

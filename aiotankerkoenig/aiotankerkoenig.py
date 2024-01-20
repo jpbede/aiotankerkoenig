@@ -10,7 +10,11 @@ from aiohttp import ClientSession
 import orjson
 from yarl import URL
 
-from .exceptions import TankerkoenigConnectionError, TankerkoenigError
+from .exceptions import (
+    TankerkoenigConnectionError,
+    TankerkoenigError,
+    TankerkoenigInvalidKeyError,
+)
 from .models import GasType, PriceInfo, Sort, Station
 
 VERSION = metadata.version(__package__)
@@ -66,6 +70,14 @@ class Tankerkoenig:
 
         obj = orjson.loads(await response.text())  # pylint: disable=maybe-no-member
         if not obj["ok"]:
+            message = obj["message"].lower()
+            if any(x in message.lower() for x in ("api-key", "apikey")):
+                msg = "tankerkoenig.de API responded with an invalid key error"
+                raise TankerkoenigInvalidKeyError(
+                    msg,
+                    {"response": obj},
+                )
+
             msg = "tankerkoenig.de API responded with an error"
             raise TankerkoenigError(
                 msg,
