@@ -2,39 +2,66 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import StrEnum
-from typing import Any
+from typing import Any, Self
 
-from mashumaro import DataClassDictMixin, field_options
+from mashumaro import field_options
+from mashumaro.mixins.orjson import DataClassORJSONMixin
 
-
-class GasType(StrEnum):
-    """Gas type."""
-
-    ALL = "all"
-    DIESEL = "diesel"
-    E5 = "e5"
-    E10 = "e10"
+from .const import Status
+from .exceptions import TankerkoenigError, TankerkoenigInvalidKeyError
 
 
-class Sort(StrEnum):
-    """Sort type."""
+@dataclass(frozen=True, slots=True, kw_only=True)
+class TankerkoenigResponse(DataClassORJSONMixin):
+    """Base class for all responses."""
 
-    DISTANCE = "dist"
-    PRICE = "price"
-    TIME = "time"
+    @classmethod
+    def __pre_deserialize__(
+        cls: type[Self],
+        d: dict[Any, Any],
+    ) -> dict[Any, Any]:
+        """Raise when response was unexpected."""
+        if d.get("ok"):
+            return d
+
+        message = d.get("message", "")
+        if any(x in message.lower() for x in ("api-key", "apikey")):
+            msg = "tankerkoenig.de API responded with an invalid key error"
+            raise TankerkoenigInvalidKeyError(
+                msg,
+                {"response": d},
+            )
+
+        msg = f"tankerkoenig.de API responded with an error: {message}"
+        raise TankerkoenigError(
+            msg,
+            {"response": d.pop("message")},
+        )
 
 
-class Status(StrEnum):
-    """Status type."""
+@dataclass(frozen=True, slots=True, kw_only=True)
+class StationListResponse(TankerkoenigResponse):
+    """Class representing a station list response."""
 
-    OPEN = "open"
-    CLOSED = "closed"
-    UNKNOWN = "unknown"
+    stations: list[Station]
 
 
-@dataclass(frozen=True, slots=True)
-class OpeningTime(DataClassDictMixin):
+@dataclass(frozen=True, slots=True, kw_only=True)
+class StationDetailResponse(TankerkoenigResponse):
+    """Class representing a station response."""
+
+    station: Station
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class PriceInfoResponse(TankerkoenigResponse):
+    """Class representing a station price info response."""
+
+    prices: dict[str, PriceInfo]
+
+
+@dataclass(frozen=True, slots=True, kw_only=True)
+class OpeningTime:
     """Class representing a station opening time."""
 
     end: str
@@ -42,8 +69,8 @@ class OpeningTime(DataClassDictMixin):
     text: str
 
 
-@dataclass(frozen=True, slots=True)
-class Station(DataClassDictMixin):
+@dataclass(frozen=True, slots=True, kw_only=True)
+class Station:
     """Class representing a station."""
 
     id: str
@@ -74,8 +101,8 @@ class Station(DataClassDictMixin):
     distance: float | None = field(metadata=field_options(alias="dist"), default=None)
 
 
-@dataclass(frozen=True, slots=True)
-class PriceInfo(DataClassDictMixin):
+@dataclass(frozen=True, slots=True, kw_only=True)
+class PriceInfo:
     """Class representing a station price info."""
 
     status: Status = Status.UNKNOWN

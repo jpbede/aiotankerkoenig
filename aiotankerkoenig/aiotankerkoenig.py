@@ -7,15 +7,17 @@ from importlib import metadata
 from typing import Any, Self
 
 from aiohttp import ClientSession
-import orjson
 from yarl import URL
 
-from .exceptions import (
-    TankerkoenigConnectionError,
-    TankerkoenigError,
-    TankerkoenigInvalidKeyError,
+from .const import GasType, Sort
+from .exceptions import TankerkoenigConnectionError, TankerkoenigError
+from .models import (
+    PriceInfo,
+    PriceInfoResponse,
+    Station,
+    StationDetailResponse,
+    StationListResponse,
 )
-from .models import GasType, PriceInfo, Sort, Station
 
 VERSION = metadata.version(__package__)
 
@@ -27,9 +29,11 @@ class Tankerkoenig:
     api_key: str
     session: ClientSession | None = None
     request_timeout: int = 10
+
     _close_session: bool = False
 
-    async def _request(self, path: str, params: dict[str, Any]) -> Any:
+    async def _request(self, path: str, params: dict[str, Any]) -> str:
+        """Handle request to tankerkoenig.de API."""
         url = URL.build(
             scheme="https",
             host="creativecommons.tankerkoenig.de",
@@ -38,19 +42,23 @@ class Tankerkoenig:
         )
 
         headers = {
-            "User-Agent": f"aiotankerkoenig/{VERSION}",
             "Accept": "application/json",
         }
 
         if self.session is None:
             self.session = ClientSession()
             self._close_session = True
-            self.session.headers.update(headers)
+            headers.update(
+                {
+                    "User-Agent": f"aiotankerkoenig/{VERSION}",
+                },
+            )
 
         try:
             async with asyncio.timeout(self.request_timeout):
                 response = await self.session.get(
                     url,
+                    headers=headers,
                 )
         except asyncio.TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
@@ -59,32 +67,15 @@ class Tankerkoenig:
             ) from exception
 
         content_type = response.headers.get("Content-Type", "")
-
+        text = await response.text()
         if "application/json" not in content_type:
-            text = await response.text()
-            msg = "Unexpected response from tankerkoenig.de API"
+            msg = "Unexpected content type from tankerkoenig.de API"
             raise TankerkoenigError(
                 msg,
                 {"Content-Type": content_type, "response": text},
             )
 
-        obj = orjson.loads(await response.text())  # pylint: disable=maybe-no-member
-        if not obj["ok"]:
-            message = obj["message"].lower()
-            if any(x in message.lower() for x in ("api-key", "apikey")):
-                msg = "tankerkoenig.de API responded with an invalid key error"
-                raise TankerkoenigInvalidKeyError(
-                    msg,
-                    {"response": obj},
-                )
-
-            msg = "tankerkoenig.de API responded with an error"
-            raise TankerkoenigError(
-                msg,
-                {"response": obj},
-            )
-
-        return obj
+        return text
 
     async def nearby_stations(
         self,
@@ -104,7 +95,7 @@ class Tankerkoenig:
                 "sort": sort,
             },
         )
-        return [Station.from_dict(station) for station in result["stations"]]
+        return StationListResponse.from_json(result).stations
 
     async def station_details(
         self,
@@ -117,7 +108,7 @@ class Tankerkoenig:
                 "id": station_id,
             },
         )
-        return Station.from_dict(result["station"])
+        return StationDetailResponse.from_json(result).station
 
     async def prices(
         self,
@@ -130,10 +121,7 @@ class Tankerkoenig:
                 "ids": ",".join(station_ids),
             },
         )
-        return {
-            station_id: PriceInfo.from_dict(price_info)
-            for station_id, price_info in result["prices"].items()
-        }
+        return PriceInfoResponse.from_json(result).prices
 
     async def close(self) -> None:
         """Close open client session."""
