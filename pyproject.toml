@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "aiotankerkoenig"
-version = "0.1.4"
+version = "0.0.0"
 description = "Async Python 3 client for tankerkoenig.de"
 authors = ["Jan-Philipp Benecke <jan-philipp@bnck.me>"]
 repository = "https://github.com/jpbede/aiotankerkoenig"
@@ -8,6 +8,16 @@ license = "MIT License"
 readme = "README.md"
 packages = [
   { include = "aiotankerkoenig" }
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: AsyncIO",
+  "Intended Audience :: Developers",
+  "Natural Language :: English",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3",
+  "Topic :: Software Development :: Libraries :: Python Modules",
 ]
 
 [tool.poetry.dependencies]
@@ -129,6 +139,7 @@ ignore = [
   "D417", # False positives in some occasions
   "PLR2004", # Just annoying, not really useful
   "PLR0913", # Too many arguments
+  "TCH001",
 ]
 select = ["ALL"]
 
