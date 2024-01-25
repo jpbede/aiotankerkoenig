@@ -1,0 +1,32 @@
+{
+  "data": "MTS-K",
+  "license": "CC BY 4.0 -  https://creativecommons.tankerkoenig.de",
+  "ok": true,
+  "station": {
+    "brand": "AVIA",
+    "diesel": 1.669,
+    "e10": 1.689,
+    "e5": 1.749,
+    "houseNumber": "115",
+    "id": "abc123-0a4c-12cc-a9b9-a488a62454be",
+    "isOpen": true,
+    "lat": 53.1,
+    "lng": 7.8,
+    "name": "AVIA Tankstelle",
+    "openingTimes": [
+      { "end": "21:00:00", "start": "06:00:00", "text": "Mo-Fr" },
+      {
+        "end": "20:00:00",
+        "start": "08:00:00",
+        "text": "Samstag, Sonntag, Feiertag"
+      }
+    ],
+    "overrides": [],
+    "place": "Exampletown",
+    "postCode": 26689,
+    "state": null,
+    "street": "Mainstreet",
+    "wholeDay": false
+  },
+  "status": "ok"
+}
