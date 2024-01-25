@@ -20,6 +20,26 @@ This package allows you to fetch data from tankerkoenig.de.
 ```bash
 pip install aiotankerkoenig
 ```
+## Usage
+
+```python
+import asyncio
+
+from aiotankerkoenig import Tankerkoenig
+
+
+async def main() -> None:
+    """Run the example."""
+    async with Tankerkoenig(api_key="abc123") as tk:
+        station_details = await tk.station_details("12345678-1234-1234-1234-123456789012")
+
+        print(f"Name: {station_details.name}")
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
 
 ## Changelog & Releases
 
@@ -106,7 +126,7 @@ SOFTWARE.
 
 [build-shield]: https://github.com/jpbede/aiotankerkoenig/actions/workflows/release.yml/badge.svg
 [build]: https://github.com/jpbede/aiotankerkoenig/actions
-[codecov-shield]: https://codecov.io/gh/jpbede/aiotankerkoenig/branch/master/graph/badge.svg
+[codecov-shield]: https://codecov.io/gh/jpbede/aiotankerkoenig/branch/main/graph/badge.svg
 [codecov]: https://codecov.io/gh/jpbede/aiotankerkoenig
 [commits-shield]: https://img.shields.io/github/commit-activity/y/jpbede/aiotankerkoenig.svg
 [commits]: https://github.com/jpbede/aiotankerkoenig/commits/main
