@@ -1,0 +1,16 @@
+# serializer version: 1
+# name: test_nearby_stations
+  list([
+    Station(id='4fd02fd5-0a4c-46b3-a9b9-a488a62454be', name='AVIA Tankstelle', house_number='115', place='Apen', post_code=26689, street='Hauptstra\\u00dfe', lat=53.22333, lng=7.812575, brand='AVIA', diesel=1.669, e10=1.689, e5=1.749, is_open=True, overrides=None, whole_day=None, state=None, opening_times=None, distance=0.9),
+    Station(id='0f20f3c7-4ee0-4a9a-7d36-39d309a6ca94', name='Heinrich Albers OHG', house_number='455', place='Apen-Augustfehn', post_code=26689, street='Hauptstr.', lat=53.21672, lng=7.76265, brand='', diesel=1.659, e10=1.679, e5=1.739, is_open=True, overrides=None, whole_day=None, state=None, opening_times=None, distance=2.5),
+    Station(id='5a27e942-38b4-5e83-adb8-cd396c99e0ab', name='Apen', house_number='8', place='Apen', post_code=26689, street='Dampfhammerstr.', lat=53.24424362183, lng=7.77206611633, brand='Hoyer', diesel=1.649, e10=None, e5=None, is_open=True, overrides=None, whole_day=None, state=None, opening_times=None, distance=3.3),
+  ])
+# ---
+# name: test_prices
+  dict({
+    '4fd02fd5-0a4c-46b3-a9b9-a488a62454be': PriceInfo(status=<Status.OPEN: 'open'>, e5=1.739, e10=1.679, diesel=1.669),
+  })
+# ---
+# name: test_station_details
+  Station(id='abc123-0a4c-12cc-a9b9-a488a62454be', name='AVIA Tankstelle', house_number='115', place='Exampletown', post_code=26689, street='Mainstreet', lat=53.1, lng=7.8, brand='AVIA', diesel=1.669, e10=1.689, e5=1.749, is_open=True, overrides=[], whole_day=False, state=None, opening_times=None, distance=None)
+# ---

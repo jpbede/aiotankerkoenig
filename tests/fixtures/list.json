@@ -1,0 +1,56 @@
+{
+  "ok": true,
+  "license": "CC BY 4.0 -  https://creativecommons.tankerkoenig.de",
+  "data": "MTS-K",
+  "status": "ok",
+  "stations": [
+    {
+      "id": "4fd02fd5-0a4c-46b3-a9b9-a488a62454be",
+      "name": "AVIA Tankstelle",
+      "brand": "AVIA",
+      "street": "Hauptstra\\u00dfe",
+      "place": "Apen",
+      "lat": 53.22333,
+      "lng": 7.812575,
+      "dist": 0.9,
+      "diesel": 1.669,
+      "e5": 1.749,
+      "e10": 1.689,
+      "isOpen": true,
+      "houseNumber": "115",
+      "postCode": 26689
+    },
+    {
+      "id": "0f20f3c7-4ee0-4a9a-7d36-39d309a6ca94",
+      "name": "Heinrich Albers OHG",
+      "brand": "",
+      "street": "Hauptstr.",
+      "place": "Apen-Augustfehn",
+      "lat": 53.21672,
+      "lng": 7.76265,
+      "dist": 2.5,
+      "diesel": 1.659,
+      "e5": 1.739,
+      "e10": 1.679,
+      "isOpen": true,
+      "houseNumber": "455",
+      "postCode": 26689
+    },
+    {
+      "id": "5a27e942-38b4-5e83-adb8-cd396c99e0ab",
+      "name": "Apen",
+      "brand": "Hoyer",
+      "street": "Dampfhammerstr.",
+      "place": "Apen",
+      "lat": 53.24424362183,
+      "lng": 7.77206611633,
+      "dist": 3.3,
+      "diesel": 1.649,
+      "e5": null,
+      "e10": null,
+      "isOpen": true,
+      "houseNumber": "8",
+      "postCode": 26689
+    }
+  ]
+}
