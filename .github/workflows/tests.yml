@@ -56,9 +56,8 @@ jobs:
         uses: actions/download-artifact@v4.1.1
         with:
           pattern: coverage-*
-          merge-multiple: true
-      - name: Show directory
-        run: ls -la .coverage
+      - name: Show dict
+        run: ls -la
       - name: 🏗 Set up Poetry
         run: pipx install poetry
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
