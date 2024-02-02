@@ -11,7 +11,7 @@ from aiotankerkoenig import (
     GasType,
     Sort,
     Tankerkoenig,
-    TankerkoenigConnectionError,
+    TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
 )
@@ -38,7 +38,7 @@ async def test_timeout(
         api_key="abc123",
         request_timeout=1,
     ) as tankerkoenig_client:
-        with pytest.raises(TankerkoenigConnectionError):
+        with pytest.raises(TankerkoenigConnectionTimeoutError):
             await tankerkoenig_client.station_details(station_id="1")
 
 
