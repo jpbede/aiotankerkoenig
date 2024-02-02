@@ -11,6 +11,7 @@ from aiotankerkoenig import (
     GasType,
     Sort,
     Tankerkoenig,
+    TankerkoenigConnectionError,
     TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
@@ -54,6 +55,21 @@ async def test_unexpected_server_response(
         body="Yes",
     )
     with pytest.raises(TankerkoenigError):
+        await tankerkoenig_client.station_details(station_id="1")
+
+
+async def test_non_200_response(
+    responses: aioresponses,
+    tankerkoenig_client: Tankerkoenig,
+) -> None:
+    """Test handling unexpected response."""
+    responses.get(
+        f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
+        status=500,
+        headers={"Content-Type": "plain/text"},
+        body="Yes",
+    )
+    with pytest.raises(TankerkoenigConnectionError):
         await tankerkoenig_client.station_details(station_id="1")
 
 
