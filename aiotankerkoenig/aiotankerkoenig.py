@@ -10,7 +10,7 @@ from aiohttp import ClientSession
 from yarl import URL
 
 from .const import GasType, Sort
-from .exceptions import TankerkoenigConnectionError, TankerkoenigError
+from .exceptions import TankerkoenigConnectionTimeoutError, TankerkoenigError
 from .models import (
     PriceInfo,
     PriceInfoResponse,
@@ -60,9 +60,10 @@ class Tankerkoenig:
                     url,
                     headers=headers,
                 )
+                response.raise_for_status()
         except asyncio.TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
-            raise TankerkoenigConnectionError(
+            raise TankerkoenigConnectionTimeoutError(
                 msg,
             ) from exception
 

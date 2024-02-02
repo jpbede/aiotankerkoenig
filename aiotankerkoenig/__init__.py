@@ -5,6 +5,7 @@ from .aiotankerkoenig import Tankerkoenig
 from .const import GasType, Sort, Status
 from .exceptions import (
     TankerkoenigConnectionError,
+    TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
 )
@@ -15,6 +16,7 @@ __all__ = [
     "TankerkoenigError",
     "TankerkoenigConnectionError",
     "TankerkoenigInvalidKeyError",
+    "TankerkoenigConnectionTimeoutError",
     "GasType",
     "Sort",
     "Status",

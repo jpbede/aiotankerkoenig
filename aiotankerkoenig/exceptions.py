@@ -10,5 +10,9 @@ class TankerkoenigConnectionError(TankerkoenigError):
     """Raised when a connection error occurs."""
 
 
+class TankerkoenigConnectionTimeoutError(TankerkoenigConnectionError):
+    """Raised when a connection times out."""
+
+
 class TankerkoenigInvalidKeyError(TankerkoenigError):
     """Raised when the API key is invalid."""
