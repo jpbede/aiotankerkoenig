@@ -4,13 +4,18 @@ from __future__ import annotations
 import asyncio
 from dataclasses import dataclass
 from importlib import metadata
+import socket
 from typing import Any, Self
 
-from aiohttp import ClientSession
+from aiohttp import ClientError, ClientSession
 from yarl import URL
 
 from .const import GasType, Sort
-from .exceptions import TankerkoenigConnectionTimeoutError, TankerkoenigError
+from .exceptions import (
+    TankerkoenigConnectionError,
+    TankerkoenigConnectionTimeoutError,
+    TankerkoenigError,
+)
 from .models import (
     PriceInfo,
     PriceInfoResponse,
@@ -66,6 +71,12 @@ class Tankerkoenig:
             raise TankerkoenigConnectionTimeoutError(
                 msg,
             ) from exception
+        except (
+            ClientError,
+            socket.gaierror,
+        ) as exception:
+            msg = "Error occurred while communicating with the tankerkoenig.de API"
+            raise TankerkoenigConnectionError(msg) from exception
 
         content_type = response.headers.get("Content-Type", "")
         text = await response.text()
