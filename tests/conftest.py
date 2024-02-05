@@ -1,5 +1,5 @@
 """Fixtures for aioelectricitymaps tests."""
-from typing import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Generator
 
 import aiohttp
 from aioresponses import aioresponses
