@@ -66,7 +66,7 @@ class Tankerkoenig:
                     headers=headers,
                 )
                 response.raise_for_status()
-        except asyncio.TimeoutError as exception:
+        except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
             raise TankerkoenigConnectionTimeoutError(
                 msg,
