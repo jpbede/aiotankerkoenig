@@ -15,6 +15,7 @@ from aiotankerkoenig import (
     TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
+    TankerkoenigRateLimitError,
 )
 from tests import load_fixture
 
@@ -70,6 +71,21 @@ async def test_non_200_response(
         body="Yes",
     )
     with pytest.raises(TankerkoenigConnectionError):
+        await tankerkoenig_client.station_details(station_id="1")
+
+
+async def test_api_rate_limit(
+    responses: aioresponses,
+    tankerkoenig_client: Tankerkoenig,
+) -> None:
+    """Test handling api rate limit response."""
+    responses.get(
+        f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
+        status=503,
+        headers={"Content-Type": "plain/text"},
+        body="Yes",
+    )
+    with pytest.raises(TankerkoenigRateLimitError):
         await tankerkoenig_client.station_details(station_id="1")
 
 

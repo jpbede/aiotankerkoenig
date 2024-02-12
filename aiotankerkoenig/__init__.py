@@ -8,6 +8,7 @@ from .exceptions import (
     TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
+    TankerkoenigRateLimitError,
 )
 from .models import PriceInfo, Station
 
@@ -17,6 +18,7 @@ __all__ = [
     "TankerkoenigConnectionError",
     "TankerkoenigInvalidKeyError",
     "TankerkoenigConnectionTimeoutError",
+    "TankerkoenigRateLimitError",
     "GasType",
     "Sort",
     "Status",
