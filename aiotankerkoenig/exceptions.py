@@ -16,3 +16,7 @@ class TankerkoenigConnectionTimeoutError(TankerkoenigConnectionError):
 
 class TankerkoenigInvalidKeyError(TankerkoenigError):
     """Raised when the API key is invalid."""
+
+
+class TankerkoenigRateLimitError(TankerkoenigError):
+    """Raised when the API rate limit is reached."""

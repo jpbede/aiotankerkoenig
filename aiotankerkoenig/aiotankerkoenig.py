@@ -7,7 +7,7 @@ from importlib import metadata
 import socket
 from typing import Any, Self
 
-from aiohttp import ClientError, ClientSession
+from aiohttp import ClientError, ClientResponseError, ClientSession
 from yarl import URL
 
 from .const import GasType, Sort
@@ -15,6 +15,7 @@ from .exceptions import (
     TankerkoenigConnectionError,
     TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
+    TankerkoenigRateLimitError,
 )
 from .models import (
     PriceInfo,
@@ -75,6 +76,8 @@ class Tankerkoenig:
             ClientError,
             socket.gaierror,
         ) as exception:
+            if isinstance(exception, ClientResponseError) and exception.code == 503:
+                raise TankerkoenigRateLimitError from exception
             msg = "Error occurred while communicating with the tankerkoenig.de API"
             raise TankerkoenigConnectionError(msg) from exception
 
