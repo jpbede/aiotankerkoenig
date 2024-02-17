@@ -61,11 +61,7 @@ class Tankerkoenig:
             )
 
         try:
-            async with asyncio.timeout(self.request_timeout):
-                response = await self.session.get(
-                    url,
-                    headers=headers,
-                )
+            async with self.session.get(url,headers=headers) as response:
                 response.raise_for_status()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
