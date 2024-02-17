@@ -1,7 +1,6 @@
 """Tankerkoenig API client."""
 from __future__ import annotations
 
-import asyncio
 from dataclasses import dataclass
 from importlib import metadata
 import socket
@@ -34,7 +33,6 @@ class Tankerkoenig:
 
     api_key: str
     session: ClientSession | None = None
-    request_timeout: int = 10
 
     _close_session: bool = False
 
@@ -61,12 +59,10 @@ class Tankerkoenig:
             )
 
         try:
-            async with asyncio.timeout(self.request_timeout):
-                response = await self.session.get(
-                    url,
-                    headers=headers,
-                )
+            async with self.session.get(url, headers=headers) as response:
                 response.raise_for_status()
+                content_type = response.headers.get("Content-Type", "")
+                text = await response.text()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
             raise TankerkoenigConnectionTimeoutError(
@@ -81,8 +77,6 @@ class Tankerkoenig:
             msg = "Error occurred while communicating with the tankerkoenig.de API"
             raise TankerkoenigConnectionError(msg) from exception
 
-        content_type = response.headers.get("Content-Type", "")
-        text = await response.text()
         if "application/json" not in content_type:
             msg = "Unexpected content type from tankerkoenig.de API"
             raise TankerkoenigError(
