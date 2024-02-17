@@ -33,7 +33,6 @@ class Tankerkoenig:
 
     api_key: str
     session: ClientSession | None = None
-    request_timeout: int = 10
 
     _close_session: bool = False
 
@@ -60,7 +59,7 @@ class Tankerkoenig:
             )
 
         try:
-            async with self.session.get(url,headers=headers) as response:
+            async with self.session.get(url, headers=headers) as response:
                 response.raise_for_status()
                 content_type = response.headers.get("Content-Type", "")
                 text = await response.text()

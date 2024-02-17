@@ -1,9 +1,7 @@
 """Test the tankerkoenig API client."""
-import asyncio
-from typing import Any
 
 import aiohttp
-from aioresponses import CallbackResult, aioresponses
+from aioresponses import aioresponses
 import pytest
 from syrupy import SnapshotAssertion
 
@@ -12,7 +10,6 @@ from aiotankerkoenig import (
     Sort,
     Tankerkoenig,
     TankerkoenigConnectionError,
-    TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
     TankerkoenigRateLimitError,
@@ -20,28 +17,6 @@ from aiotankerkoenig import (
 from tests import load_fixture
 
 TANKERKOENIG_ENDPOINT = "https://creativecommons.tankerkoenig.de"
-
-
-async def test_timeout(
-    responses: aioresponses,
-) -> None:
-    """Test request timeout."""
-
-    async def response_handler(_: str, **_kwargs: Any) -> CallbackResult:
-        """Response handler for this test."""
-        await asyncio.sleep(2)
-        return CallbackResult(body="Good morning!")
-
-    responses.get(
-        f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
-        callback=response_handler,
-    )
-    async with Tankerkoenig(
-        api_key="abc123",
-        request_timeout=1,
-    ) as tankerkoenig_client:
-        with pytest.raises(TankerkoenigConnectionTimeoutError):
-            await tankerkoenig_client.station_details(station_id="1")
 
 
 async def test_unexpected_server_response(
