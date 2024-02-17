@@ -33,7 +33,6 @@ class Tankerkoenig:
 
     api_key: str
     session: ClientSession | None = None
-    request_timeout: int = 10
 
     _close_session: bool = False
 
