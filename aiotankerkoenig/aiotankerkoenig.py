@@ -63,6 +63,8 @@ class Tankerkoenig:
         try:
             async with self.session.get(url,headers=headers) as response:
                 response.raise_for_status()
+                content_type = response.headers.get("Content-Type", "")
+                text = await response.text()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
             raise TankerkoenigConnectionTimeoutError(
@@ -77,8 +79,6 @@ class Tankerkoenig:
             msg = "Error occurred while communicating with the tankerkoenig.de API"
             raise TankerkoenigConnectionError(msg) from exception
 
-        content_type = response.headers.get("Content-Type", "")
-        text = await response.text()
         if "application/json" not in content_type:
             msg = "Unexpected content type from tankerkoenig.de API"
             raise TankerkoenigError(
