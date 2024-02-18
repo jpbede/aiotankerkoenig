@@ -72,7 +72,7 @@ class Tankerkoenig:
             ClientError,
             socket.gaierror,
         ) as exception:
-            if isinstance(exception, ClientResponseError) and exception.code == 503:
+            if isinstance(exception, ClientResponseError) and exception.status == 503:
                 raise TankerkoenigRateLimitError from exception
             msg = "Error occurred while communicating with the tankerkoenig.de API"
             raise TankerkoenigConnectionError(msg) from exception
