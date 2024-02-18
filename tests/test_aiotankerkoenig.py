@@ -10,6 +10,7 @@ from aiotankerkoenig import (
     Sort,
     Tankerkoenig,
     TankerkoenigConnectionError,
+    TankerkoenigConnectionTimeoutError,
     TankerkoenigError,
     TankerkoenigInvalidKeyError,
     TankerkoenigRateLimitError,
@@ -188,3 +189,18 @@ async def test_prices(
         )
         == snapshot
     )
+
+
+async def test_timeout(
+    responses: aioresponses,
+) -> None:
+    """Test request timeout."""
+    responses.get(
+        f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
+        timeout=True,
+    )
+    async with Tankerkoenig(
+        api_key="abc123",
+    ) as tankerkoenig_client:
+        with pytest.raises(TankerkoenigConnectionTimeoutError):
+            await tankerkoenig_client.station_details(station_id="1")
