@@ -1,4 +1,5 @@
 """Constants for the aiotankerkoenig."""
+
 from enum import StrEnum
 
 

@@ -1,4 +1,5 @@
 """Exceptions for the aiotankerkoenig client."""
+
 from __future__ import annotations
 
 
