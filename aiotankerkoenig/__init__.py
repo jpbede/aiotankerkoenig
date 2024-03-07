@@ -1,4 +1,5 @@
 """Tankerkoenig API client."""
+
 from __future__ import annotations
 
 from .aiotankerkoenig import Tankerkoenig

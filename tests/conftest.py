@@ -1,4 +1,5 @@
 """Fixtures for aioelectricitymaps tests."""
+
 from collections.abc import AsyncGenerator, Generator
 
 import aiohttp
@@ -11,10 +12,13 @@ from aiotankerkoenig import Tankerkoenig
 @pytest.fixture(name="tankerkoenig_client")
 async def client() -> AsyncGenerator[Tankerkoenig, None]:
     """Return a Spotify client."""
-    async with aiohttp.ClientSession() as session, Tankerkoenig(
-        session=session,
-        api_key="abc123",
-    ) as tankerkoenig_client:
+    async with (
+        aiohttp.ClientSession() as session,
+        Tankerkoenig(
+            session=session,
+            api_key="abc123",
+        ) as tankerkoenig_client,
+    ):
         yield tankerkoenig_client
 
 
