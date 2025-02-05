@@ -142,7 +142,7 @@ ignore = [
   "D417", # False positives in some occasions
   "PLR2004", # Just annoying, not really useful
   "PLR0913", # Too many arguments
-  "TCH001",
+  "TC001",
 ]
 select = ["ALL"]
 
