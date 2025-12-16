@@ -14,7 +14,6 @@ classifiers = [
   "Framework :: AsyncIO",
   "Intended Audience :: Developers",
   "Natural Language :: English",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Programming Language :: Python :: 3.14",
@@ -23,10 +22,10 @@ classifiers = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 aiohttp = ">=3.0.0"
 yarl = ">=1.6.0"
-mashumaro = "^3.11"
+mashumaro = ">=3.11"
 orjson = ">=3.9.0"
 
 [tool.poetry.group.dev.dependencies]
@@ -63,7 +62,7 @@ source = ["aiotankerkoenig"]
 # free to run mypy on Windows, Linux, or macOS and get consistent
 # results.
 platform = "linux"
-python_version = "3.11"
+python_version = "3.14"
 
 # show error messages from unrelated files
 follow_imports = "normal"
