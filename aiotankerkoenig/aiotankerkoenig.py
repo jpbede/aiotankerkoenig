@@ -72,7 +72,7 @@ class Tankerkoenig:
                     path,
                     response.status,
                     content_type,
-                    text,
+                    text.replace(self.api_key, "**redacted**"),
                 )
 
                 response.raise_for_status()
@@ -108,7 +108,7 @@ class Tankerkoenig:
     ) -> list[Station]:
         """Get nearby stations."""
         _LOGGER.debug(
-            "Fetching nearby stations at (%s, %s) radius=%s type=%s sort=%s",
+            "Fetching nearby stations near (%0.2f, %0.2f) radius=%s type=%s sort=%s",
             coordinates[0],
             coordinates[1],
             radius,
@@ -146,7 +146,7 @@ class Tankerkoenig:
         station_ids: list[str],
     ) -> dict[str, PriceInfo]:
         """Get station details."""
-        _LOGGER.debug("Fetching prices for %s", station_ids)
+        _LOGGER.debug("Fetching prices for %d station(s)", len(station_ids))
         result = await self._request(
             path="/json/prices.php",
             params={
