@@ -64,12 +64,12 @@ Thank you for being involved! :heart_eyes:
 
 ## Setting up development environment
 
-This Python project is fully managed using [uv](https://docs.astral.sh/uv/). But also relies on the use of NodeJS for certain checks during development.
+This Python project is fully managed using [uv]. But also relies on the use of NodeJS for certain checks during development.
 
 You need at least:
 
 - Python 3.11+
-- [uv](https://docs.astral.sh/uv/getting-started/installation/)
+- [uv][uv-install]
 - NodeJS 20+ (including NPM)
 
 To install all packages, including all development requirements:
