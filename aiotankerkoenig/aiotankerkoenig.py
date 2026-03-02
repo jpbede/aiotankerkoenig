@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from importlib import metadata
+import logging
 import socket
 from typing import Any, Self
 
@@ -25,6 +26,8 @@ from .models import (
     StationListResponse,
 )
 
+_LOGGER = logging.getLogger(__name__)
+
 VERSION = metadata.version(__package__)
 
 
@@ -39,6 +42,7 @@ class Tankerkoenig:
 
     async def _request(self, path: str, params: dict[str, Any]) -> str:
         """Handle request to tankerkoenig.de API."""
+        _LOGGER.debug("Requesting %s", path)
         url = URL.build(
             scheme="https",
             host="creativecommons.tankerkoenig.de",
@@ -61,9 +65,17 @@ class Tankerkoenig:
 
         try:
             async with self.session.get(url, headers=headers) as response:
-                response.raise_for_status()
                 content_type = response.headers.get("Content-Type", "")
                 text = await response.text()
+                _LOGGER.debug(
+                    "Response from %s (status: %s, content-type: %s): %s",
+                    path,
+                    response.status,
+                    content_type,
+                    text.replace(self.api_key, "**redacted**"),
+                )
+
+                response.raise_for_status()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
             raise TankerkoenigConnectionTimeoutError(
@@ -95,6 +107,14 @@ class Tankerkoenig:
         sort: Sort,
     ) -> list[Station]:
         """Get nearby stations."""
+        _LOGGER.debug(
+            "Fetching nearby stations near (%0.2f, %0.2f) radius=%s type=%s sort=%s",
+            coordinates[0],
+            coordinates[1],
+            radius,
+            gas_type,
+            sort,
+        )
         result = await self._request(
             path="/json/list.php",
             params={
@@ -112,6 +132,7 @@ class Tankerkoenig:
         station_id: str,
     ) -> Station:
         """Get station details."""
+        _LOGGER.debug("Fetching station details for %s", station_id)
         result = await self._request(
             path="/json/detail.php",
             params={
@@ -125,6 +146,7 @@ class Tankerkoenig:
         station_ids: list[str],
     ) -> dict[str, PriceInfo]:
         """Get station details."""
+        _LOGGER.debug("Fetching prices for %d station(s)", len(station_ids))
         result = await self._request(
             path="/json/prices.php",
             params={
