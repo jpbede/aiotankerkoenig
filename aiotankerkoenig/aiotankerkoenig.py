@@ -65,7 +65,6 @@ class Tankerkoenig:
 
         try:
             async with self.session.get(url, headers=headers) as response:
-                response.raise_for_status()
                 content_type = response.headers.get("Content-Type", "")
                 text = await response.text()
                 _LOGGER.debug(
@@ -75,6 +74,8 @@ class Tankerkoenig:
                     content_type,
                     text,
                 )
+
+                response.raise_for_status()
         except TimeoutError as exception:
             msg = "Timeout occurred while connecting to tankerkoenig.de API"
             raise TankerkoenigConnectionTimeoutError(
