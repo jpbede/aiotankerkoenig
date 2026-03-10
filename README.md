@@ -20,6 +20,7 @@ This package allows you to fetch data from tankerkoenig.de.
 ```bash
 pip install aiotankerkoenig
 ```
+
 ## Usage
 
 ```python
@@ -39,7 +40,6 @@ async def main() -> None:
 if __name__ == "__main__":
     asyncio.run(main())
 ```
-
 
 ## Changelog & Releases
 

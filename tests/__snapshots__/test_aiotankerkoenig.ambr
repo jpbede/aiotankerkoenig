@@ -12,5 +12,5 @@
   })
 # ---
 # name: test_station_details
-  Station(id='abc123-0a4c-12cc-a9b9-a488a62454be', name='AVIA Tankstelle', house_number='115', place='Exampletown', post_code=26689, street='Mainstreet', lat=53.1, lng=7.8, brand='AVIA', diesel=1.669, e10=1.689, e5=1.749, is_open=True, overrides=[], whole_day=False, state=None, opening_times=None, distance=None)
+  Station(id='abc123-0a4c-12cc-a9b9-a488a62454be', name='AVIA Tankstelle', house_number='115', place='Exampletown', post_code=26689, street='Mainstreet', lat=53.1, lng=7.8, brand='AVIA', diesel=1.669, e10=1.689, e5=1.749, is_open=True, overrides=[], whole_day=False, state=None, opening_times=[OpeningTime(end='21:00:00', start='06:00:00', text='Mo-Fr'), OpeningTime(end='20:00:00', start='08:00:00', text='Samstag, Sonntag, Feiertag')], distance=None)
 # ---

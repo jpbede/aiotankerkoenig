@@ -96,7 +96,7 @@ class Station:
     )
     state: str | None = None
     opening_times: list[OpeningTime] | None = field(
-        metadata=field_options(alias="opening_times"),
+        metadata=field_options(alias="openingTimes"),
         default=None,
     )
     distance: float | None = field(metadata=field_options(alias="dist"), default=None)
