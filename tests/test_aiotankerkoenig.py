@@ -1,5 +1,7 @@
 """Test the tankerkoenig API client."""
 
+import asyncio
+
 import aiohttp
 from aioresponses import aioresponses
 import pytest
@@ -204,3 +206,62 @@ async def test_timeout(
     ) as tankerkoenig_client:
         with pytest.raises(TankerkoenigConnectionTimeoutError):
             await tankerkoenig_client.station_details(station_id="1")
+
+
+async def test_timeout_cancellation() -> None:
+    """Test request timeout raised as a cancelled task."""
+
+    class TimeoutSession:
+        """Session raising a timeout cancellation from get."""
+
+        def get(
+            self,
+            *_args: object,
+            **_kwargs: object,
+        ) -> "TimeoutSession":
+            """Return self as an async context manager."""
+            return self
+
+        async def __aenter__(self) -> None:
+            """Raise cancellation with a timeout reason."""
+            msg = "Global task timeout"
+            raise asyncio.CancelledError(msg)
+
+        async def __aexit__(self, *_exc_info: object) -> None:
+            """Async exit."""
+
+    tankerkoenig_client = Tankerkoenig(
+        api_key="abc123",
+        session=TimeoutSession(),  # type: ignore[arg-type]
+    )
+    with pytest.raises(TankerkoenigConnectionTimeoutError):
+        await tankerkoenig_client.station_details(station_id="1")
+
+
+async def test_non_timeout_cancellation() -> None:
+    """Test request cancellation without timeout reason."""
+
+    class CancelledSession:
+        """Session raising a non-timeout cancellation from get."""
+
+        def get(
+            self,
+            *_args: object,
+            **_kwargs: object,
+        ) -> "CancelledSession":
+            """Return self as an async context manager."""
+            return self
+
+        async def __aenter__(self) -> None:
+            """Raise cancellation without a timeout reason."""
+            raise asyncio.CancelledError
+
+        async def __aexit__(self, *_exc_info: object) -> None:
+            """Async exit."""
+
+    tankerkoenig_client = Tankerkoenig(
+        api_key="abc123",
+        session=CancelledSession(),  # type: ignore[arg-type]
+    )
+    with pytest.raises(asyncio.CancelledError):
+        await tankerkoenig_client.station_details(station_id="1")

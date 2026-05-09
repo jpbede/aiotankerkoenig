@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 from importlib import metadata
 import logging
@@ -29,6 +30,14 @@ from .models import (
 _LOGGER = logging.getLogger(__name__)
 
 VERSION = metadata.version(__package__)
+
+
+def _raise_timeout_error(exception: BaseException) -> None:
+    """Raise library specific timeout error."""
+    msg = "Timeout occurred while connecting to tankerkoenig.de API"
+    raise TankerkoenigConnectionTimeoutError(
+        msg,
+    ) from exception
 
 
 @dataclass
@@ -77,10 +86,11 @@ class Tankerkoenig:
 
                 response.raise_for_status()
         except TimeoutError as exception:
-            msg = "Timeout occurred while connecting to tankerkoenig.de API"
-            raise TankerkoenigConnectionTimeoutError(
-                msg,
-            ) from exception
+            _raise_timeout_error(exception)
+        except asyncio.CancelledError as exception:
+            if "timeout" not in str(exception).lower():
+                raise
+            _raise_timeout_error(exception)
         except (
             ClientError,
             socket.gaierror,
