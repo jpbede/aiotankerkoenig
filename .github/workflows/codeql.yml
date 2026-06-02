@@ -21,7 +21,7 @@ jobs:
       security-events: write
     steps:
       - name: ⤵️ Check out code from GitHub
-        uses: actions/checkout@v6.0.2
+        uses: actions/checkout@v6.0.3
       - name: 🏗 Initialize CodeQL
         uses: github/codeql-action/init@v4.36.1
       - name: 🚀 Perform CodeQL Analysis
