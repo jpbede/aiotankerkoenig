@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+import re
 from typing import Any, Self
 
 from mashumaro import field_options
@@ -26,7 +27,8 @@ class TankerkoenigResponse(DataClassORJSONMixin):
             return d
 
         message = d.get("message", "")
-        if any(x in message.lower() for x in ("api-key", "apikey")):
+        message_words = re.findall(r"[\w-]+", message.lower())
+        if any(x in message_words for x in ("api-key", "apikey", "key")):
             msg = "tankerkoenig.de API responded with an invalid key error"
             raise TankerkoenigInvalidKeyError(
                 msg,
