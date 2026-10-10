@@ -49,7 +49,7 @@ async def test_non_200_response(
         body="Yes",
     )
     with pytest.raises(TankerkoenigConnectionError):
-        x = await tankerkoenig_client.station_details(station_id="1")
+        await tankerkoenig_client.station_details(station_id="1")
 
 
 async def test_api_rate_limit(
