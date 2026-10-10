@@ -72,6 +72,8 @@ async def test_api_rate_limit(
     [
         "API-Key existiert nicht",
         "APIKey existiert nicht.",
+        "KEY existiert nicht",
+        "Key existiert nicht oder ist deaktiviert",
     ],
 )
 async def test_invalid_apikey_response(
@@ -89,15 +91,17 @@ async def test_invalid_apikey_response(
         await tankerkoenig_client.station_details(station_id="1")
 
 
+@pytest.mark.parametrize("message", ["Idk what happened!", "The monkey is nearby."])
 async def test_general_error_response(
     responses: aioresponses,
     tankerkoenig_client: Tankerkoenig,
+    message: str,
 ) -> None:
     """Test handling of a general error response."""
     responses.get(
         f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
         status=200,
-        body='{"status": "error", "ok": false, "message": "Idk what happened!"}',
+        body='{"status": "error", "ok": false, "message": "' + message + '"}',
     )
     with pytest.raises(TankerkoenigError):
         await tankerkoenig_client.station_details(station_id="1")
