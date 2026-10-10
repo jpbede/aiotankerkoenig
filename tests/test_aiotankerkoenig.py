@@ -3,7 +3,7 @@
 import asyncio
 
 import aiohttp
-from aioresponses import aioresponses
+from aiointercept import CallbackResult, aiointercept
 import pytest
 from syrupy import SnapshotAssertion
 
@@ -23,7 +23,7 @@ TANKERKOENIG_ENDPOINT = "https://creativecommons.tankerkoenig.de"
 
 
 async def test_unexpected_server_response(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
 ) -> None:
     """Test handling unexpected response."""
@@ -38,7 +38,7 @@ async def test_unexpected_server_response(
 
 
 async def test_non_200_response(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
 ) -> None:
     """Test handling unexpected response."""
@@ -49,11 +49,11 @@ async def test_non_200_response(
         body="Yes",
     )
     with pytest.raises(TankerkoenigConnectionError):
-        await tankerkoenig_client.station_details(station_id="1")
+        x = await tankerkoenig_client.station_details(station_id="1")
 
 
 async def test_api_rate_limit(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
 ) -> None:
     """Test handling api rate limit response."""
@@ -75,7 +75,7 @@ async def test_api_rate_limit(
     ],
 )
 async def test_invalid_apikey_response(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
     message: str,
 ) -> None:
@@ -90,7 +90,7 @@ async def test_invalid_apikey_response(
 
 
 async def test_general_error_response(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
 ) -> None:
     """Test handling of a general error response."""
@@ -104,7 +104,7 @@ async def test_general_error_response(
 
 
 async def test_putting_in_own_session(
-    responses: aioresponses,
+    responses: aiointercept,
 ) -> None:
     """Test putting in own session."""
     responses.get(
@@ -122,7 +122,7 @@ async def test_putting_in_own_session(
 
 
 async def test_creating_own_session(
-    responses: aioresponses,
+    responses: aiointercept,
 ) -> None:
     """Test creating own session."""
     responses.get(
@@ -139,7 +139,7 @@ async def test_creating_own_session(
 
 
 async def test_station_details(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -153,7 +153,7 @@ async def test_station_details(
 
 
 async def test_nearby_stations(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -175,7 +175,7 @@ async def test_nearby_stations(
 
 
 async def test_prices(
-    responses: aioresponses,
+    responses: aiointercept,
     tankerkoenig_client: Tankerkoenig,
     snapshot: SnapshotAssertion,
 ) -> None:
@@ -194,16 +194,30 @@ async def test_prices(
 
 
 async def test_timeout(
-    responses: aioresponses,
+    responses: aiointercept,
 ) -> None:
     """Test request timeout."""
+
+    async def delayed_response(
+        *_args: object,
+        **_kwargs: object,
+    ) -> CallbackResult:
+        await asyncio.sleep(0.1)
+        return CallbackResult()
+
     responses.get(
         f"{TANKERKOENIG_ENDPOINT}/json/detail.php?apikey=abc123&id=1",
-        timeout=True,
+        callback=delayed_response,
     )
-    async with Tankerkoenig(
-        api_key="abc123",
-    ) as tankerkoenig_client:
+    async with (
+        aiohttp.ClientSession(
+            timeout=aiohttp.ClientTimeout(total=0.01),
+        ) as session,
+        Tankerkoenig(
+            api_key="abc123",
+            session=session,
+        ) as tankerkoenig_client,
+    ):
         with pytest.raises(TankerkoenigConnectionTimeoutError):
             await tankerkoenig_client.station_details(station_id="1")
 
