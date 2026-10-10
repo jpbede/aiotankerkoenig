@@ -103,8 +103,9 @@ async def test_general_error_response(
         status=200,
         body='{"status": "error", "ok": false, "message": "' + message + '"}',
     )
-    with pytest.raises(TankerkoenigError):
+    with pytest.raises(TankerkoenigError) as exc_info:
         await tankerkoenig_client.station_details(station_id="1")
+    assert exc_info.type is TankerkoenigError
 
 
 async def test_putting_in_own_session(
