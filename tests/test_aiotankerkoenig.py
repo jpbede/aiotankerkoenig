@@ -73,7 +73,7 @@ async def test_api_rate_limit(
         "API-Key existiert nicht",
         "APIKey existiert nicht.",
         "KEY existiert nicht",
-        "Key existiert nicht oder ist deaktiviert",
+        "Key existiert nicht oder ist deaktiviert",  # codespell:ignore
     ],
 )
 async def test_invalid_apikey_response(
