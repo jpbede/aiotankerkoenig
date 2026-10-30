@@ -22,7 +22,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
@@ -40,7 +40,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
@@ -60,7 +60,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
@@ -102,7 +102,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
@@ -120,7 +120,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
@@ -138,7 +138,7 @@ jobs:
         uses: astral-sh/setup-uv@v8.2.0
       - name: 🏗 Set up Python ${{ env.DEFAULT_PYTHON }}
         id: python
-        uses: actions/setup-python@v6.2.0
+        uses: actions/setup-python@v6.3.0
         with:
           python-version: ${{ env.DEFAULT_PYTHON }}
       - name: 🏗 Install Python dependencies
